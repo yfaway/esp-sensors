@@ -29,18 +29,19 @@
 #define MQTT_HOST IPAddress(192, 168, 0, 204)
 #define MQTT_PORT 1883
 
-#define MQTT_TOPIC_TEMPERATURE "$temperatureTopic"
-#define MQTT_TOPIC_HUMIDITY "$humidityTopic"
+#define MQTT_TOPIC_TEMPERATURE "$topic1"
+#define MQTT_TOPIC_HUMIDITY "$topic2"
 
 #define DHT_PIN 14 // digital pin connected to the DHT sensor
 
 #define DHT_TYPE DHT11   // or DHT21 or DHT22
 
-#define POLLING_INTERVAL_IN_MS 10000 // interval at which to read sensors
+// interval at which to read sensors
+#define POLLING_INTERVAL_IN_MS 30000 // 30 secs
 
 // Interval at which to send an MQTT message, even if the temperature or
 // humidity value doesn't change.
-#define MQTT_PUBLISH_INTERVAL_IN_MS 60000
+#define MQTT_PUBLISH_INTERVAL_IN_MS 120000 // 2 minutes
 
 DHT dht(DHT_PIN, DHT_TYPE);
 
