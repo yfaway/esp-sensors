@@ -1,4 +1,4 @@
-#include "Gas.h"
+#include "AnalogGasSensor.h"
 #include <Arduino.h>
 
 // interval at which to read sensors
@@ -7,19 +7,13 @@
 // Interval at which to send an MQTT message, even if the value doesn't change
 #define MQTT_PUBLISH_INTERVAL_IN_MS 120000 // 2 minutes
 
-#define MQTT_TOPIC "esp/utility/gas"
+#define MQTT_TOPIC "esp/utility/naturalGas"
 
-const int Gas::DIFFERENCE_THRESHOLD = 3;
-
-Gas::Gas(int analogPin) : 
-    pin(analogPin), lastValue(0), sentPacketId(0), mqttTimestampInMs(0),
-    previousTimestampInMs(0) {
+AnalogGasSensor::AnalogGasSensor(int analogPin, int aThreshold) : 
+    Sensor(analogPin, aThreshold) {
 }
 
-void Gas::setup() {
-}
-
-void Gas::onProcessCycle(AsyncMqttClient& mqttClient,
+void AnalogGasSensor::onProcessCycle(AsyncMqttClient& mqttClient,
         unsigned long currentTimeInMs) {
     // sample at the interval
     if (currentTimeInMs - previousTimestampInMs >= POLLING_INTERVAL_IN_MS) {
@@ -27,7 +21,7 @@ void Gas::onProcessCycle(AsyncMqttClient& mqttClient,
 
         int currentValue = analogRead(pin);
 
-        if ( abs(currentValue - lastValue) >= DIFFERENCE_THRESHOLD
+        if ( abs(currentValue - lastValue) >= threshold
                 || (currentTimeInMs - mqttTimestampInMs)
                         > MQTT_PUBLISH_INTERVAL_IN_MS) {
             lastValue = currentValue;
@@ -38,11 +32,5 @@ void Gas::onProcessCycle(AsyncMqttClient& mqttClient,
             Serial.printf("Sent to %s (packetId: %i): %.2f\r\n",
                     MQTT_TOPIC, sentPacketId, lastValue);
         }
-    }
-}
-
-void Gas::onMqttPacketAcknowledged(uint16_t packetId) {
-    if ( packetId == sentPacketId ) {
-        mqttTimestampInMs = millis();
     }
 }

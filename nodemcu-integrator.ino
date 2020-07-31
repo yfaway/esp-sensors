@@ -20,7 +20,7 @@
 #include <Ticker.h>
 #include <AsyncMqttClient.h>
 
-#include "Gas.h"
+#include "AnalogGasSensor.h"
 #include "TemperatureAndHumidity.h"
 
 #define WIFI_SSID "$wifiSsid"
@@ -41,7 +41,9 @@ WiFiEventHandler wifiDisconnectHandler;
 Ticker wifiReconnectTimer;
 
 TemperatureAndHumidity dhtSensor(DHT_PIN);
-Gas gasSensor(A0);
+AnalogGasSensor analogGasSensor(A0);
+AnalogGasSensor digitalGasSensor(A0);
+AnalogGasSensor digitalSmokeSensor(A0);
 
 void connectToMqtt();
 
@@ -80,7 +82,9 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
 
 void onMqttPublish(uint16_t packetId) {
     dhtSensor.onMqttPacketAcknowledged(packetId);
-    gasSensor.onMqttPacketAcknowledged(packetId);
+    analogGasSensor.onMqttPacketAcknowledged(packetId);
+    digitalGasSensor.onMqttPacketAcknowledged(packetId);
+    digitalSmokeSensor.onMqttPacketAcknowledged(packetId);
 
     Serial.printf("MQTT server acknowledged packet %i\r\n", packetId);
 }
@@ -90,7 +94,9 @@ void setup() {
     Serial.println();
 
     dhtSensor.setup();
-    gasSensor.setup();
+    analogGasSensor.setup();
+    digitalGasSensor.setup();
+    digitalSmokeSensor.setup();
 
     wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
     wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
@@ -107,5 +113,7 @@ void loop() {
     unsigned long currentTimeInMs = millis();
 
     dhtSensor.onProcessCycle(mqttClient, currentTimeInMs);
-    gasSensor.onProcessCycle(mqttClient, currentTimeInMs);
+    analogGasSensor.onProcessCycle(mqttClient, currentTimeInMs);
+    digitalGasSensor.onProcessCycle(mqttClient, currentTimeInMs);
+    digitalSmokeSensor.onProcessCycle(mqttClient, currentTimeInMs);
 }
