@@ -11,12 +11,8 @@
 //#define MQTT_TOPIC_HUMIDITY "$topic2"
 #define MQTT_TOPIC_HUMIDITY "esp/utility/humidity"
 
-DhtHumidity::DhtHumidity(int pin, float threshold) : 
-    Sensor(pin, threshold), dht(pin, DHT11) {
-}
-
-void DhtHumidity::setup() {
-    dht.begin();
+DhtHumidity::DhtHumidity(int pin, DHT& aDht, float threshold) : 
+    Sensor(pin, threshold), dht(aDht) {
 }
 
 void DhtHumidity::onProcessCycle(AsyncMqttClient& mqttClient,

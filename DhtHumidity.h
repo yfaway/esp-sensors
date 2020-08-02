@@ -17,18 +17,13 @@ class DhtHumidity : public Sensor<float, float>
         /**
          * Creates a new temperature processor for the sensor at the given pin.
          */
-        DhtHumidity(int pin, float threshold = 0.1);
-
-        /**
-         * Called once by the sketch to set up this sensor.
-         */
-        void setup();
+        DhtHumidity(int pin, DHT& dht, float threshold = 0.1);
 
         void onProcessCycle(AsyncMqttClient& mqttClient,
                 unsigned long currentTimeInMs);
 
     private:
-        DHT dht;
+        DHT& dht;
 };
 
 #endif

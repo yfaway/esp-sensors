@@ -16,12 +16,16 @@
         want further reduction in MQTT traffic.
  */
 
+#include <vector>
+
 #include <ESP8266WiFi.h>
 #include <Ticker.h>
 #include <AsyncMqttClient.h>
 
 #include "AnalogGasSensor.h"
-#include "TemperatureAndHumidity.h"
+#include "DigitalGasSensor.h"
+#include "DhtTemperatureAndHumidity.h"
+#include "BaseSensor.h"
 
 #define WIFI_SSID "$wifiSsid"
 #define WIFI_PASSWORD "$wifiPassword"
@@ -40,10 +44,10 @@ WiFiEventHandler wifiConnectHandler;
 WiFiEventHandler wifiDisconnectHandler;
 Ticker wifiReconnectTimer;
 
-TemperatureAndHumidity dhtSensor(DHT_PIN);
-AnalogGasSensor analogGasSensor(A0);
-AnalogGasSensor digitalGasSensor(A0);
-AnalogGasSensor digitalSmokeSensor(A0);
+const std::vector<BaseSensor*> sensors {
+    new DhtTemperatureAndHumidity(14),
+    new AnalogGasSensor(A0)
+};
 
 void connectToMqtt();
 
@@ -81,10 +85,9 @@ void onMqttDisconnect(AsyncMqttClientDisconnectReason reason) {
 }
 
 void onMqttPublish(uint16_t packetId) {
-    dhtSensor.onMqttPacketAcknowledged(packetId);
-    analogGasSensor.onMqttPacketAcknowledged(packetId);
-    digitalGasSensor.onMqttPacketAcknowledged(packetId);
-    digitalSmokeSensor.onMqttPacketAcknowledged(packetId);
+    for (auto* sensor : sensors) {
+        sensor->onMqttPacketAcknowledged(packetId);
+    }
 
     Serial.printf("MQTT server acknowledged packet %i\r\n", packetId);
 }
@@ -93,10 +96,9 @@ void setup() {
     Serial.begin(115200);
     Serial.println();
 
-    dhtSensor.setup();
-    analogGasSensor.setup();
-    digitalGasSensor.setup();
-    digitalSmokeSensor.setup();
+    for (auto* sensor : sensors) {
+        sensor->setup();
+    }
 
     wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
     wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
@@ -112,8 +114,7 @@ void setup() {
 void loop() {
     unsigned long currentTimeInMs = millis();
 
-    dhtSensor.onProcessCycle(mqttClient, currentTimeInMs);
-    analogGasSensor.onProcessCycle(mqttClient, currentTimeInMs);
-    digitalGasSensor.onProcessCycle(mqttClient, currentTimeInMs);
-    digitalSmokeSensor.onProcessCycle(mqttClient, currentTimeInMs);
+    for (auto* sensor : sensors) {
+        sensor->onProcessCycle(mqttClient, currentTimeInMs);
+    }
 }

@@ -4,11 +4,13 @@
 #include <cstdint>
 #include <AsyncMqttClient.h>
 
+#include "BaseSensor.h"
+
 /**
- * The base of all sensor types.
+ * The template class for various sensor types.
  */
 template <typename ValueType, typename ThresholdType>
-class Sensor
+class Sensor : public BaseSensor
 {
     public:
         /**
@@ -25,9 +27,6 @@ class Sensor
          */
         virtual void setup() {
         }
-
-        virtual void onProcessCycle(AsyncMqttClient& mqttClient,
-                unsigned long currentTimeInMs) = 0;
 
         /**
          * Called by the main sketch when it receives the MQTT ack.

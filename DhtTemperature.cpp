@@ -11,12 +11,8 @@
 //#define MQTT_TOPIC_TEMPERATURE "$topic1"
 #define MQTT_TOPIC_TEMPERATURE "esp/utility/temperature"
 
-DhtTemperature::DhtTemperature(int pin, float threshold) : 
-    Sensor(pin, threshold), dht(pin, DHT11) {
-}
-
-void DhtTemperature::setup() {
-    dht.begin();
+DhtTemperature::DhtTemperature(int pin, DHT& aDht, float threshold) : 
+    Sensor(pin, threshold), dht(aDht) {
 }
 
 void DhtTemperature::onProcessCycle(AsyncMqttClient& mqttClient,
