@@ -2,6 +2,7 @@
 #define DHT_TEMPERATURE_H
 
 #include <cstdint>
+#include <string>
 
 #include <AsyncMqttClient.h>
 #include <DHT.h>
@@ -17,10 +18,8 @@ class DhtTemperature : public Sensor<float, float>
         /**
          * Creates a new temperature processor for the sensor at the given pin.
          */
-        DhtTemperature(int pin, DHT& dht, float threshold = 0.1);
-
-        void onProcessCycle(AsyncMqttClient& mqttClient,
-                unsigned long currentTimeInMs);
+        DhtTemperature(int pin, DHT& dht, const std::string& topic,
+                float threshold = 0.1);
 
     private:
         DHT& dht;

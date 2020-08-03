@@ -2,6 +2,7 @@
 #define DhtTemperatureAndHumidity_H
 
 #include <cstdint>
+#include <string>
 
 #include <AsyncMqttClient.h>
 #include <DHT.h>
@@ -24,7 +25,8 @@ class DhtTemperatureAndHumidity : public BaseSensor
          * Creates a new temperature and humidity processor for the sensor at 
          * the given pin.
          */
-        DhtTemperatureAndHumidity(int pin);
+        DhtTemperatureAndHumidity(int pin, const std::string& temperatureTopic,
+                const std::string& humidityTopic);
 
         /**
          * Called once by the sketch to set up this sensor.

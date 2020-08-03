@@ -1,15 +1,12 @@
 #ifndef DHT_HUMIDITY_H
 #define DHT_HUMIDITY_H
 
-#include <cstdint>
-
-#include <AsyncMqttClient.h>
+#include <string>
 #include <DHT.h>
-
 #include "Sensor.h"
 
 /**
- * The processor for the DHT temperature sensors.
+ * The humidity processor for the DHT temperature sensors.
  */
 class DhtHumidity : public Sensor<float, float>
 {
@@ -17,10 +14,7 @@ class DhtHumidity : public Sensor<float, float>
         /**
          * Creates a new temperature processor for the sensor at the given pin.
          */
-        DhtHumidity(int pin, DHT& dht, float threshold = 0.1);
-
-        void onProcessCycle(AsyncMqttClient& mqttClient,
-                unsigned long currentTimeInMs);
+        DhtHumidity(int pin, DHT& dht, const std::string& topic, float threshold = 0.1);
 
     private:
         DHT& dht;

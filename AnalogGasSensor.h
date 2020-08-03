@@ -1,9 +1,7 @@
 #ifndef ANALOG_GAS_H
 #define ANALOG_GAS_H
 
-#include <cstdint>
-#include <AsyncMqttClient.h>
-
+#include <string>
 #include "Sensor.h"
 
 /**
@@ -17,10 +15,7 @@ class AnalogGasSensor : public Sensor<int, int>
          * @param threshold the difference between the current value and the
          *     last value, at which point an MQTT message will be sent out.
          */
-        AnalogGasSensor(int analogPin, int threshold = 3);
-
-        void onProcessCycle(AsyncMqttClient& mqttClient,
-                unsigned long currentTimeInMs);
+        AnalogGasSensor(int analogPin, const std::string& topic, int threshold = 3);
 };
 
 #endif

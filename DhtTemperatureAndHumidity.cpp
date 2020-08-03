@@ -1,9 +1,10 @@
 #include "DhtTemperatureAndHumidity.h"
 #include <Arduino.h>
 
-DhtTemperatureAndHumidity::DhtTemperatureAndHumidity(int pin) : 
+DhtTemperatureAndHumidity::DhtTemperatureAndHumidity(int pin,
+        const std::string& temperatureTopic, const std::string& humidityTopic) : 
     dht(pin, DHT11),
-    temperature(pin, dht), humidity(pin, dht) {
+    temperature(pin, dht, temperatureTopic), humidity(pin, dht, humidityTopic) {
 }
 
 void DhtTemperatureAndHumidity::setup() {

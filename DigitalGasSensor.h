@@ -1,9 +1,7 @@
 #ifndef DIGITAL_GAS_H
 #define DIGITAL_GAS_H
 
-#include <cstdint>
-#include <AsyncMqttClient.h>
-
+#include <string>
 #include "Sensor.h"
 
 /**
@@ -15,10 +13,7 @@ class DigitalGasSensor : public Sensor<int, int>
         /**
          * Creates a new gas processor for the sensor at the given digital pin.
          */
-        DigitalGasSensor(int digitalPin);
-
-        void onProcessCycle(AsyncMqttClient& mqttClient,
-                unsigned long currentTimeInMs);
+        DigitalGasSensor(int digitalPin, const std::string& topic);
 };
 
 #endif
