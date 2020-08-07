@@ -4,6 +4,10 @@
 AnalogGasSensor::AnalogGasSensor(
         int analogPin, const std::string& topic, int aThreshold) : 
     Sensor(analogPin, topic, aThreshold,
-            [&analogPin] { return analogRead(analogPin); }) {
+            [this] { return analogRead(this->pin); },
+            this->absDifferenceThresholdFunction(),
+            2000) 
+{
+    lastValue = -1;
 }
 

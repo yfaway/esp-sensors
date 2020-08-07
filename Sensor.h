@@ -109,14 +109,15 @@ class Sensor : public BaseSensor
          */
         void publishValueIf(AsyncMqttClient& mqttClient,
                 const ValueFunction& getValue,
-                const ThresholdFunction& crossTheshold) {
+                const ThresholdFunction& crossThreshold) {
 
             unsigned long currentTimeInMs = millis();
             if (currentTimeInMs - previousTimestampInMs >= pollingIntervalInMs) {
                 previousTimestampInMs = currentTimeInMs;
 
                 auto currentValue = getValue();
-                if ( crossTheshold(currentValue, lastValue, threshold)
+                //Serial.printf("Value for %s: %s\n", mqttTopic.c_str(), String(currentValue).c_str());
+                if ( crossThreshold(currentValue, lastValue, threshold)
                         || (currentTimeInMs - mqttTimestampInMs) 
                                 > maxMqttPublishingIntervalInMs) {
                     lastValue = currentValue;
@@ -124,8 +125,8 @@ class Sensor : public BaseSensor
                     sentPacketId = mqttClient.publish(
                             mqttTopic.c_str(), 1, true, String(lastValue).c_str());
 
-                    Serial.printf("Sent to %s (packetId: %i): %.2f\r\n",
-                            mqttTopic.c_str(), sentPacketId, lastValue);
+                    Serial.printf("Sent to %s (packetId: %i): %s\n",
+                            mqttTopic.c_str(), sentPacketId, String(lastValue).c_str());
                 }
             }
         }

@@ -2,7 +2,9 @@
 #include <Arduino.h>
 
 DigitalGasSensor::DigitalGasSensor(int pin, const std::string& topic) 
-    : Sensor(pin, topic, -1, [&pin] { return digitalRead(pin); },
-            this->simpleDifferenceThresholdFunction())
+    : Sensor(pin, topic, -1, [this] { return digitalRead(13); },
+            this->simpleDifferenceThresholdFunction(),
+            2000)
 {
+    lastValue = -1;
 }

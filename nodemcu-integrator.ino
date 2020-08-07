@@ -45,9 +45,15 @@ WiFiEventHandler wifiDisconnectHandler;
 Ticker wifiReconnectTimer;
 
 const std::vector<BaseSensor*> sensors {
+    // DHT-11 & Natural Gas
+    /*
     new DhtTemperatureAndHumidity(14, "esp/utility/temperature",
             "esp/utility/humidity"),
-    new AnalogGasSensor(A0, "esp/utility/naturalGas")
+    new AnalogGasSensor(A0, "esp/utility/naturalGasValue"),
+    */
+
+    // Smoke.
+    new AnalogGasSensor(A0, "esp/utility/smokeValue")
 };
 
 void connectToMqtt();
