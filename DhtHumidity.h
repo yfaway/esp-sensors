@@ -16,6 +16,9 @@ class DhtHumidity : public Sensor<float, float>
          */
         DhtHumidity(int pin, DHT& dht, const std::string& topic, float threshold = 0.1);
 
+    protected:
+        float readValue() const;
+
     private:
         DHT& dht;
 };

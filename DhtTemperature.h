@@ -21,6 +21,9 @@ class DhtTemperature : public Sensor<float, float>
         DhtTemperature(int pin, DHT& dht, const std::string& topic,
                 float threshold = 0.1);
 
+    protected:
+        float readValue() const;
+
     private:
         DHT& dht;
 };

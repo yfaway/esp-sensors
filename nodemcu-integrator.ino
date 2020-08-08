@@ -46,14 +46,12 @@ Ticker wifiReconnectTimer;
 
 const std::vector<BaseSensor*> sensors {
     // DHT-11 & Natural Gas
-    /*
     new DhtTemperatureAndHumidity(14, "esp/utility/temperature",
             "esp/utility/humidity"),
-    new AnalogGasSensor(A0, "esp/utility/naturalGasValue"),
-    */
+    new AnalogGasSensor(A0, "esp/utility/naturalGas", 400),
 
     // Smoke.
-    new AnalogGasSensor(A0, "esp/utility/smokeValue")
+    //new AnalogGasSensor(A0, "esp/utility/smoke", 130)
 };
 
 void connectToMqtt();
@@ -119,9 +117,11 @@ void setup() {
 }
 
 void loop() {
-    unsigned long currentTimeInMs = millis();
+    if ( mqttClient.connected() ) { 
+        unsigned long currentTimeInMs = millis();
 
-    for (auto* sensor : sensors) {
-        sensor->onProcessCycle(mqttClient, currentTimeInMs);
+        for (auto* sensor : sensors) {
+            sensor->onProcessCycle(mqttClient, currentTimeInMs);
+        }
     }
 }

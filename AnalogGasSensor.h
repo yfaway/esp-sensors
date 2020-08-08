@@ -15,7 +15,18 @@ class AnalogGasSensor : public Sensor<int, int>
          * @param threshold the difference between the current value and the
          *     last value, at which point an MQTT message will be sent out.
          */
-        AnalogGasSensor(int analogPin, const std::string& topic, int threshold = 3);
+        AnalogGasSensor(int analogPin, const std::string& topic, 
+                int warningThreshold = 300, int updateThreshold = 3);
+
+    protected:
+        int readValue() const;
+
+        bool isInStableRange(const int& currentValue) const;
+
+        bool isInBadState(const int& currentValue) const;
+
+    private:
+        int warningThreshold;
 };
 
 #endif
