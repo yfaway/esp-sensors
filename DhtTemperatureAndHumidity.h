@@ -20,14 +20,15 @@
  */
 class DhtTemperatureAndHumidity : public BaseSensor
 {
-    public:
+    protected:
         /**
          * Creates a new temperature and humidity processor for the sensor at 
          * the given pin.
          */
-        DhtTemperatureAndHumidity(int pin, const std::string& temperatureTopic,
+        DhtTemperatureAndHumidity(int dhtType, int pin, const std::string& temperatureTopic,
                 const std::string& humidityTopic);
 
+    public:
         /**
          * Called once by the sketch to set up this sensor.
          */
@@ -46,6 +47,28 @@ class DhtTemperatureAndHumidity : public BaseSensor
 
         DhtTemperature temperature;
         DhtHumidity humidity;
+};
+
+class Dht11TemperatureAndHumidity : public DhtTemperatureAndHumidity 
+{
+    public:
+        /**
+         * Creates a new temperature and humidity processor for the DHT11
+         * sensor at the given pin.
+         */
+        Dht11TemperatureAndHumidity(int pin, const std::string& temperatureTopic,
+                const std::string& humidityTopic);
+};
+
+class Dht22TemperatureAndHumidity : public DhtTemperatureAndHumidity 
+{
+    public:
+        /**
+         * Creates a new temperature and humidity processor for the DHT22
+         * sensor at the given pin.
+         */
+        Dht22TemperatureAndHumidity(int pin, const std::string& temperatureTopic,
+                const std::string& humidityTopic);
 };
 
 #endif
