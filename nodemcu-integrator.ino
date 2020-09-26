@@ -33,10 +33,6 @@
 #define MQTT_HOST IPAddress(192, 168, 0, 204)
 #define MQTT_PORT 1883
 
-#define DHT_PIN 14 // digital pin connected to the DHT sensor
-
-//#define DHT_TYPE DHT11   // or DHT21 or DHT22
-
 AsyncMqttClient mqttClient;
 Ticker mqttReconnectTimer;
 
@@ -44,6 +40,12 @@ WiFiEventHandler wifiConnectHandler;
 WiFiEventHandler wifiDisconnectHandler;
 Ticker wifiReconnectTimer;
 
+/*
+ * PIN mappings:
+ *   D5 --> 14.
+ *
+ * https://www.cnx-software.com/wp-content/uploads/2015/10/NodeMCU_v0.9_Pinout.png
+ */
 const std::vector<BaseSensor*> sensors {
     // Basement (DHT-11 & Natural Gas)
     //new Dht11TemperatureAndHumidity(14, "esp/utility/temperature",
@@ -51,14 +53,16 @@ const std::vector<BaseSensor*> sensors {
     //new AnalogGasSensor(A0, "esp/utility/naturalGas", 400),
 
     // Bedroom 2 (DHT-22 + Smoke)
+    /*
     new Dht22TemperatureAndHumidity(14, "esp/bedroom2/temperature",
             "esp/bedroom2/humidity"),
-    new AnalogGasSensor(A0, "esp/bedroom2/smoke", 130),
+    new AnalogGasSensor(A0, "esp/bedroom2/smoke", 170),
+    */
 
     // Bedroom 3 (DHT-22 + Smoke)
-    //new Dht22TemperatureAndHumidity(14, "esp/bedroom3/temperature",
+    new Dht22TemperatureAndHumidity(14, "esp/bedroom3/temperature",
             "esp/bedroom3/humidity"),
-    //new AnalogGasSensor(A0, "esp/bedroom3/smoke", 130),
+    new AnalogGasSensor(A0, "esp/bedroom3/smoke", 170),
 };
 
 void connectToMqtt();

@@ -67,7 +67,7 @@ class Sensor : public BaseSensor
         virtual void onProcessCycle(AsyncMqttClient& mqttClient,
                 unsigned long currentTimeInMs) {
 
-            auto result = publishValueIf(mqttClient);
+            auto result = readAndPublishValue(mqttClient);
             if ( result.first ) {
                 // send stability value
                 if ( ! stable ) {
@@ -113,7 +113,7 @@ class Sensor : public BaseSensor
          * If the returned value is true, the value '1' will be sent to the
          * 'state' MQTT channel.
          */
-        virtual bool isInBadState(const ValueType& currentValue) const {
+        virtual bool isInBadState(const ValueType& currentValue) {
             return false;
         }
 
@@ -132,7 +132,7 @@ class Sensor : public BaseSensor
          * @return a pair of boolean value indicating whether the value is
          *     published or not, and the actual value.
          */
-        std::pair<bool, ValueType> publishValueIf(AsyncMqttClient& mqttClient) {
+        std::pair<bool, ValueType> readAndPublishValue(AsyncMqttClient& mqttClient) {
 
             unsigned long currentTimeInMs = millis();
             if (currentTimeInMs - previousTimestampInMs >= pollingIntervalInMs) {

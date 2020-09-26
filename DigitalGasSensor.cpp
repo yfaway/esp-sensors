@@ -20,6 +20,6 @@ bool DigitalGasSensor::isInStableRange(const int& currentValue) const {
     return currentValue <= 130;
 }
 
-bool DigitalGasSensor::isInBadState(const int& currentValue) const {
+bool DigitalGasSensor::isInBadState(const int& currentValue) {
     return currentValue >= warningThreshold;
 }

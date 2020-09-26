@@ -23,10 +23,22 @@ class AnalogGasSensor : public Sensor<int, int>
 
         bool isInStableRange(const int& currentValue) const;
 
-        bool isInBadState(const int& currentValue) const;
+        /**
+         * Returns true if the value indicates that the sensor has detected
+         * the associated gas above the threshold.
+         * 
+         * To avoid spontaneous jump in the gas value (obseved with the CO2
+         * sensor), this method won't return false right after the value 
+         * passes the threshold. Instead it would wait for couple of readings
+         * above the threshold before returning true.
+         */
+        bool isInBadState(const int& currentValue);
 
     private:
         int warningThreshold;
+        
+        // track how many time the value has continuously pass the threshold.
+        int badStateCount;
 };
 
 #endif

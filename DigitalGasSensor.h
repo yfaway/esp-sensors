@@ -23,7 +23,7 @@ class DigitalGasSensor : public Sensor<int, int>
 
         bool isUpdatable(const int& currentValue) const;
 
-        bool isInBadState(const int& currentValue) const;
+        bool isInBadState(const int& currentValue);
 
     private:
         int warningThreshold;
