@@ -1,7 +1,7 @@
 #include "AnalogGasSensor.h"
 #include <Arduino.h>
 
-const int BAD_STATE_THRESHOLD = 5;
+const int BAD_STATE_THRESHOLD = 2;
 
 AnalogGasSensor::AnalogGasSensor(
         int analogPin, const std::string& topic, int aWarningThreshold,

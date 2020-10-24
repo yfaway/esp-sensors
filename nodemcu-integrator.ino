@@ -56,13 +56,13 @@ const std::vector<BaseSensor*> sensors {
     /*
     new Dht22TemperatureAndHumidity(14, "esp/bedroom2/temperature",
             "esp/bedroom2/humidity"),
-    new AnalogGasSensor(A0, "esp/bedroom2/smoke", 170),
+    new AnalogGasSensor(A0, "esp/bedroom2/smoke", 250),
     */
 
     // Bedroom 3 (DHT-22 + Smoke)
     new Dht22TemperatureAndHumidity(14, "esp/bedroom3/temperature",
             "esp/bedroom3/humidity"),
-    new AnalogGasSensor(A0, "esp/bedroom3/smoke", 170),
+    new AnalogGasSensor(A0, "esp/bedroom3/smoke", 250),
 };
 
 void connectToMqtt();
